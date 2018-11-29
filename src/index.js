@@ -4,9 +4,14 @@ import { Worker, isMainThread, parentPort, workerData } from 'worker-thread';
 import {} from 'dotenv/config';
 import { getServerHost, getServerPort } from './helpers';
 
-const doSomething = () =>
-  new Promise((resolve, reject) => {
-    const worker = new Worker();
+const calculateFactorial = number => {
+  if (number === 0) {
+    return 1;
+  }
+  return new Promise((resolve, reject) => {
+    const worker = new Worker('factorial-worker.js', {
+      workerData: script
+    });
     worker.on('mesage', resolve);
     worker.on('error', reject);
     worker.on('exit', errorCode => {
@@ -14,6 +19,7 @@ const doSomething = () =>
         reject(new Error(`Worker stopped with code: ${errorCode}`));
     });
   });
+};
 
 // http
 //   .createServer((req, res) => {
