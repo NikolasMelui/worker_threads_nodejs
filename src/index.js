@@ -1,16 +1,29 @@
 import http from 'http';
+import { Worker, isMainThread, parentPort, workerData } from 'worker-thread';
+
 import {} from 'dotenv/config';
 import { getServerHost, getServerPort } from './helpers';
 
-http
-  .createServer((req, res) => {
-    res.writeHead(200, 'OK', { 'Content-Type': 'text/plain' });
-    res.end(
-      `Hello from ${getServerHost(req)}:${getServerPort(
-        req
-      )} and welcome to the multikey-node-boilerplate!`
-    );
-  })
-  .listen(process.env.SERVER_PORT, () =>
-    console.log(`Server is listening on port ${process.env.SERVER_PORT}`)
-  );
+const doSomething = () =>
+  new Promise((resolve, reject) => {
+    const worker = new Worker();
+    worker.on('mesage', resolve);
+    worker.on('error', reject);
+    worker.on('exit', errorCode => {
+      if (errCode !== 0)
+        reject(new Error(`Worker stopped with code: ${errorCode}`));
+    });
+  });
+
+// http
+//   .createServer((req, res) => {
+//     res.writeHead(200, 'OK', { 'Content-Type': 'text/plain' });
+//     res.end(
+//       `Hello from ${getServerHost(req)}:${getServerPort(
+//         req
+//       )} and welcome to the multikey-node-boilerplate!`
+//     );
+//   })
+//   .listen(process.env.SERVER_PORT, () =>
+//     console.log(`Server is listening on port ${process.env.SERVER_PORT}`)
+//   );
