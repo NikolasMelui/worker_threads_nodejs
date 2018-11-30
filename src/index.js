@@ -11,7 +11,7 @@ const calculateFactorial = number => {
   if (number === 0) {
     return 1;
   }
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const numbers = [...new Array(number)].map((_, index) => index + 1);
     const segmentSize = Math.ceil(numbers.length / userCPUCount);
     const segments = [];
@@ -23,15 +23,17 @@ const calculateFactorial = number => {
       segments.push(segment);
     }
 
-    segments.forEach(segment => {
-      const worker = new Worker('factorial-worker.js', {
-        workerData: segment
-      });
-      worker.on('mesage', resolve);
-      worker.on('error', reject);
-      worker.on('exit', errorCode => {
-        if (errCode !== 0)
-          reject(new Error(`Worker stopped with code: ${errorCode}`));
+    await segments.map(segment => {
+      new Promise((resolve, reject) => {
+        const worker = new Worker('factorial-worker.js', {
+          workerData: segment
+        });
+        worker.on('mesage', resolve);
+        worker.on('error', reject);
+        worker.on('exit', errorCode => {
+          if (errCode !== 0)
+            reject(new Error(`Worker stopped with code: ${errorCode}`));
+        });
       });
     });
   });
