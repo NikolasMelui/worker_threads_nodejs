@@ -7,9 +7,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "yarn clean && yarn build && nodemon --experimental-worker build/index.js",
+    "start": "yarn build && nodemon --experimental-worker build/index.js",
     "build": "babel src -d build",
-    "clean": "rm -r build",
     "serve": "node build/index.js",
     "test": "jest"
   },
