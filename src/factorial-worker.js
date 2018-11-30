@@ -1,5 +1,10 @@
-import { Worker, isMainThread, parentPort, workerData } from 'worker_threads';
+import { Worker, parentPort, workerData } from 'worker_threads';
 
-const number = workerData;
-const result = 0;
+const numbers = workerData;
+
+const calculateFactorial = numArray =>
+  numArray.reduce((acc, value) => acc * value, 1);
+
+const result = calculateFactorial(numbers);
+
 parentPort.postMessage(result);
