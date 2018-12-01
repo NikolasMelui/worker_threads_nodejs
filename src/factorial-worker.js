@@ -1,9 +1,9 @@
-import { Worker, parentPort, workerData } from 'worker_threads';
+import { parentPort, workerData } from 'worker_threads';
 
 const numbers = workerData;
 
 const calculateFactorial = numArray =>
-  numArray.reduce((acc, value) => acc * value, 1);
+  numArray.reduce((acc, val) => acc * val, 1);
 
 const result = calculateFactorial(numbers);
 
