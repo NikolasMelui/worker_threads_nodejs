@@ -25,7 +25,6 @@
   "eslint.packageManager": "yarn",
   "dependencies": {
     "@types/node": "^10.3.1",
-    "del": "^3.0.0",
     "inquirer": "^6.2.1",
     "ora": "^3.0.0"
   }
