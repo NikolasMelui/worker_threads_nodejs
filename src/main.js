@@ -1,15 +1,19 @@
-import http from 'http';
+// import http from 'http';
+// import url from 'url';
+
 import os from 'os';
 import path from 'path';
-import url from 'url';
+
 import { Worker } from 'worker_threads';
+
 import inquirer from 'inquirer';
 import ora from 'ora';
 
 import {} from 'dotenv/config';
+
 // import { getServerHost, getServerPort } from './helpers';
 
-const SERVER_PORT = 3030;
+// const SERVER_PORT = 3030;
 
 const workerPath = path.resolve(__dirname, 'factorial-worker.js');
 
