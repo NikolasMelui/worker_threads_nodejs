@@ -1,13 +1,19 @@
-import http from 'http';
+// import http from 'http';
+// import url from 'url';
+
 import os from 'os';
 import path from 'path';
-import url from 'url';
+
 import { Worker } from 'worker_threads';
 
+import inquirer from 'inquirer';
+import ora from 'ora';
+
 import {} from 'dotenv/config';
+
 // import { getServerHost, getServerPort } from './helpers';
 
-const SERVER_PORT = 3030;
+// const SERVER_PORT = 3030;
 
 const workerPath = path.resolve(__dirname, 'factorial-worker.js');
 
@@ -57,17 +63,32 @@ const calculateFactorial = number => {
   });
 };
 
-http
-  .createServer((req, res) => {
-    res.writeHead(200, 'OK', { 'Content-Type': 'text/plain' });
-    const curUrl = url.parse(req.url, true);
-    const parentInteger = curUrl.query.integer;
+(async () => {
+  const { inputNumber } = await inquirer.prompt([
+    {
+      type: 'input',
+      name: 'inputNumber',
+      message: 'Calculate factorial for:',
+      default: 10
+    }
+  ]);
 
-    calculateFactorial(Number(parentInteger)).then(result => {
-      console.log(result);
-      res.end(`The factorial is ${result}`);
-    });
-  })
-  .listen(SERVER_PORT, () =>
-    console.log(`Server is listening on port ${SERVER_PORT}`)
-  );
+  const spinner = ora('Calculating...').start();
+  const result = await calculateFactorial(inputNumber);
+  spinner.succeed(`Result: ${result}`);
+})();
+
+// http
+//   .createServer((req, res) => {
+//     res.writeHead(200, 'OK', { 'Content-Type': 'text/plain' });
+//     const curUrl = url.parse(req.url, true);
+//     const parentInteger = curUrl.query.integer;
+
+//     calculateFactorial(Number(parentInteger)).then(result => {
+//       console.log(result);
+//       res.end(`The factorial is ${result}`);
+//     });
+//   })
+//   .listen(SERVER_PORT, () =>
+//     console.log(`Server is listening on port ${SERVER_PORT}`)
+//   );
